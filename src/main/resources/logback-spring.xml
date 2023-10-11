@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <property name="LOGS" value="./logs" />
+
+  <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>%black(%d{ISO8601}) %highlight(%-5level) [%blue(%t)] %yellow(%C{1}): %msg%n%throwable</Pattern>
+    </layout>
+  </appender>
+
+  <appender name="TraceFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOGS}/dbtest-trace.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>%d %p %C{1} [%t] %m%n</Pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily and when the file reaches 10 MegaBytes -->
+      <fileNamePattern>${LOGS}/archived/dbtest-trace-%d{yyyy-MM-dd}.%i.log
+      </fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>10MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+  </appender>
+
+  <root  level="WARN">
+    <appender-ref ref="TraceFile" />
+    <appender-ref ref="Console" />
+  </root>
+
+  <logger name="org.springframework.web"  level="WARN">
+    <appender-ref ref="TraceFile" />
+    <appender-ref ref="Console" />
+  </logger>
+
+  <logger name="org.springframework.web" level="WARN">
+    <appender-ref ref="Console" />
+  </logger>
+
+
+  <logger name="org.hibernate.SQL" level="DEBUG">
+    <appender-ref ref="TraceFile" />
+  </logger>
+  <logger name="org.hibernate.type" level="DEBUG">
+    <appender-ref ref="TraceFile" />
+  </logger>
+
+
+</configuration>

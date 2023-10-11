@@ -1,4 +1,4 @@
-package com.example.restservice.config;
+package com.davra.ledgertests.config;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.restservice.models.DataBatchLedgerEntry;
+import com.davra.ledgertests.models.DataBatchLedgerEntry;
 
 import java.time.Instant;
 import java.util.List;
@@ -65,6 +65,10 @@ public class LedgerService {
     repository.deleteAll(entries);
   }
 
+  public void deleteEntry(final DataBatchLedgerEntry entry) {
+    repository.delete(entry);
+  }
+
   public List<DataBatchLedgerEntry> pollForEntriesToProcess(final Pageable pageable) {
     final long startTimestamp = System.currentTimeMillis() - dataBatchLifespanMillis + dataBatchPollingAllowanceMillis;
     final long endTimestamp = System.currentTimeMillis() - dataBatchLatencyMillis - dataBatchPollingAllowanceMillis;
@@ -101,7 +105,7 @@ public class LedgerService {
     log.warn("Clearing table.");
     repository.truncateTable();
   }
-
+  
   public Long getCount() {
     return repository.count();
   }
@@ -109,5 +113,15 @@ public class LedgerService {
   public DataBatchLedgerEntry randomEntry() {
     return repository.randomEntry();
   }
+
+  // public void createTableIfNotExists() {
+  //   log.info("Create Table If Not Exists.");
+  //   repository.createTableIfNotExists();
+  // }
+
+  // public void vacuum() {
+  //   log.info("vacuum");
+  //   repository.vacuum();
+  // }
 
 }

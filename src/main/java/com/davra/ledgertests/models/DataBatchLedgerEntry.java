@@ -1,4 +1,4 @@
-package com.example.restservice.models;
+package com.davra.ledgertests.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
